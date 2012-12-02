@@ -1,0 +1,12 @@
+{
+    "name": "zeke/pdf",
+    "authors": [
+        {
+            "name": "Ilya Shalnev",
+            "email": "zeke@cs-cart.com"
+        }
+    ],
+    "require": {
+	"Respect/Rest": "dev-develop"
+    }
+}
