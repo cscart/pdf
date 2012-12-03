@@ -24,24 +24,25 @@ $r->post('/~zeke/pdf/convert', function() {
     $prefix = dirname(__FILE__);
 
     if (!empty($request['content'])) {
-        foreach ($request['content'] as $content) {
-            $file = $prefix . '/tmp/' . uniqid(time()) . '.html';
-            file_put_contents($file, $content);
-            $files[] = $file;
-        }
+        $descriptorspec = array(
+            0 => array('pipe', 'r'), // stdin
+            1 => array('pipe', 'w'), // stdout
+            2 => array('pipe', 'w'), // stderr
+        );
+        $process = proc_open($prefix . '/bin/wkhtmltopdf --encoding utf8 -q - -', $descriptorspec, $pipes);
 
-        $output = $prefix . '/tmp/' . uniqid(time()) . '.pdf';
+        // Send the HTML on stdin
+        fwrite($pipes[0], $request['content']);
+        fclose($pipes[0]);
+        
+        // Read the outputs
+        $contents = stream_get_contents($pipes[1]);
+        $errors = stream_get_contents($pipes[2]);
 
-        exec($prefix . '/bin/wkhtmltopdf ' . implode(' ', $files) . ' --encoding utf8 ' . $output);
-
-        $pdf = file_get_contents($output);
-
-        foreach ($files as $file) {
-            unlink($file);
-        }
-        unlink($output);
-
-        return $pdf;
+        fclose($pipes[1]);
+        $return_value = proc_close($process);
+        
+        return $contents;
     }
 })->accept(array(
     'application/pdf' => function($content) {
