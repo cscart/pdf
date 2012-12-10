@@ -14,7 +14,7 @@ dibi::connect(array(
 
 
 $r = new Router;
-$r->post($request_prefix . '/pdf/convert', function() {
+$r->post($request_prefix . '/pdf/render', function() {
 
     $request = json_decode(file_get_contents('php://input'), true);
     return fn_run_wk($request['content']);
@@ -25,7 +25,7 @@ $r->post($request_prefix . '/pdf/convert', function() {
     }
 ));
 
-$r->post($request_prefix . '/pdf/push', function() {
+$r->post($request_prefix . '/pdf/batch/add', function() {
 
     $request = json_decode(file_get_contents('php://input'), true);
 
@@ -48,7 +48,7 @@ $r->post($request_prefix . '/pdf/push', function() {
     }
 ));
 
-$r->get($request_prefix . '/pdf/get/*', function($t_id) {
+$r->get($request_prefix . '/pdf/batch/render/*', function($t_id) {
     
     $result = dibi::query("SELECT data FROM [queue] WHERE transaction_id = %s", $t_id);
     $data = $result->fetchAll();
