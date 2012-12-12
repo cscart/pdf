@@ -5,7 +5,7 @@ use Pdfc\Converter;
 use Pdfc\Response;
 use Respect\Rest\Router;
 
-define('APP_WEB', dirname($_SERVER['SCRIPT_NAME']));
+define('APP_WEB', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/'));
 define('APP_DIR', dirname(__FILE__) . '/app');
 
 $classLoader = require('app/vendor/autoload.php');
