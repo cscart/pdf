@@ -1,5 +1,5 @@
 {
-    "name": "zeke/pdf",
+    "name": "zeke/pdfc",
     "authors": [
         {
             "name": "Ilya Shalnev",
@@ -7,7 +7,7 @@
         }
     ],
     "require": {
-	"Respect/Rest": "dev-develop",
-	"dg/dibi": "*"
+        "Respect/Rest": "dev-develop",
+        "dg/dibi": "*"
     }
 }
