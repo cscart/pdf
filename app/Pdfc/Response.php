@@ -23,7 +23,16 @@ class Response
         return array(
             'application/json' => function($content) {
                 return json_encode($content);
-            }            
+            }
         );
     }
+
+    static public function status()
+    {
+        return array(
+            'text/html' => function($content) {
+                return $content;
+            }
+        );
+    }    
 }

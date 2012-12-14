@@ -3,6 +3,7 @@
 use Pdfc\Batch;
 use Pdfc\Converter;
 use Pdfc\Response;
+use Pdfc\Status;
 use Respect\Rest\Router;
 
 define('APP_WEB', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/'));
@@ -26,3 +27,7 @@ $r->post('/pdf/batch/add', function() {
     $request = json_decode(file_get_contents('php://input'), true);
     return Batch::add($request);
 })->accept(Response::data());
+
+$r->get('/status', function() {
+    return Status::get();
+})->accept(Response::status());
