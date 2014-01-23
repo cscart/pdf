@@ -9,8 +9,9 @@ Resource                           | Description
 [GET /status](#get1)               | Get service status
 [GET /pdf/batch/render/:id](#get2) | Render batch content (deprecated)
 [POST /pdf/render](#post1)         | Render PDF
-[POST /pdf/batch/render](#post2)   | Render batch content
 [POST /pdf/batch/add](#post3)      | Add content to batch
+[POST /pdf/batch/render](#post2)   | Render batch content
+
 
 <a name="get1"/>
 
@@ -24,11 +25,13 @@ curl -X GET 'http://example.com/status'
 OK
 ```
 
-[Вверх](#top)
+[Top](#top)
 
 <a name="get2"/>
 
 ### GET /pdf/batch/render/:id
+
+!! Deprecated. Use `POST /pdf/batch/render` instead !!!
 
 ```
 curl -X GET 'http://example.com/pdf/batch/render/1354353464'
@@ -38,7 +41,7 @@ curl -X GET 'http://example.com/pdf/batch/render/1354353464'
 PDF CONTENT
 ```
 
-[Вверх](#top)
+[Top](#top)
 
 <a name="post1"/>
 
@@ -66,7 +69,33 @@ Result
 PDF CONTENT
 ```
 
-[Вверх](#top)
+[Top](#top)
+
+<a name="post3"/>
+
+### POST /pdf/batch/add
+
+
+Required params: content
+Optional params: transaction_id (you receive transaction ID on first request and should use it with next requests)
+
+```
+curl --header 'Content-type: application/json' -X POST 'http://example.com/pdf/batch/add' '...'
+```
+
+```json
+{
+  "content": "<b>hello</b>",
+}
+```
+
+Result
+
+```application/json
+[111222333444]
+```
+
+[Top](#top)
 
 <a name="post2"/>
 
@@ -92,32 +121,6 @@ Result
 
 ```application/pdf
 PDF CONTENT
-```
-
-[Вверх](#top)
-
-<a name="post3"/>
-
-### POST /pdf/batch/add
-
-
-Required params: content
-Optional params: transaction_id (you receive transaction ID on first request and should use it with next requests)
-
-```
-curl --header 'Content-type: application/json' -X POST 'http://example.com/pdf/batch/add' '...'
-```
-
-```json
-{
-  "content": "<b>hello</b>",
-}
-```
-
-Result
-
-```application/json
-[111222333444]
 ```
 
 [Вверх](#top)
