@@ -20,10 +20,10 @@ class Batch
         return $t_id;
     }
 
-    static public function render($transaction_id)    
+    static public function render($params)    
     {
-        $contents = Queue::instance()->get($transaction_id);
+        $params['content'] = Queue::instance()->get($params['transaction_id']);
 
-        return Converter::convert($contents);
+        return Converter::convert($params);
     }
 }

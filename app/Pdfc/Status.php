@@ -11,7 +11,7 @@ class Status
 
     static public function get()
     {
-        $response = Converter::convert(self::$_test);
+        $response = Converter::convert(array('content' => self::$_test));
         
         if (strpos($response, self::$_search) === 0) {
             $status = 'OK';

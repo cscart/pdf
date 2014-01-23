@@ -16,11 +16,12 @@ $r = new Router(APP_WEB);
 
 $r->post('/pdf/render', function() {
     $request = json_decode(file_get_contents('php://input'), true);
-    return Converter::convert($request['content']);
+    return Converter::convert($request);
 })->accept(Response::pdf());
 
-$r->get('/pdf/batch/render/*', function($transaction_id) {
-    return Batch::render($transaction_id);
+$r->post('/pdf/batch/render/*', function() {
+	$request = json_decode(file_get_contents('php://input'), true);
+    return Batch::render($request);
 })->accept(Response::pdf());
 
 $r->post('/pdf/batch/add', function() {
@@ -31,3 +32,9 @@ $r->post('/pdf/batch/add', function() {
 $r->get('/status', function() {
     return Status::get();
 })->accept(Response::status());
+
+/* deprecated */
+$r->get('/pdf/batch/render/*', function($transaction_id) {
+    return Batch::render(array('transaction_id' => $transaction_id));
+})->accept(Response::pdf());
+
