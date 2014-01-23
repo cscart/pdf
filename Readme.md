@@ -48,8 +48,12 @@ PDF CONTENT
 ### POST /pdf/render
 
 
-Required params: content
-Optional params: page_size (A4, A5, A6, A7, A8), orientation (Portrait, Landscape)
+Required params: 
+  - content - HTML code
+  
+Optional params: 
+  - page_size (A4, A5, A6, A7, A8)
+  - orientation (Portrait, Landscape)
 
 ```
 curl --header 'Content-type: application/json' -X POST 'http://example.com/pdf/render' --data-binary '...'
@@ -76,8 +80,11 @@ PDF CONTENT
 ### POST /pdf/batch/add
 
 
-Required params: content
-Optional params: transaction_id (you receive transaction ID on first request and should use it with next requests)
+Required params: 
+ - content - HTML code
+
+Optional params: 
+ - transaction_id - batch ID, you'll receive it on first request and should use it with next requests.
 
 ```
 curl --header 'Content-type: application/json' -X POST 'http://example.com/pdf/batch/add' '...'
@@ -102,8 +109,12 @@ Result
 ### POST /pdf/batch/render
 
 
-Required params: transaction_id
-Optional params: page_size (A4, A5, A6, A7, A8), orientation (Portrait, Landscape)
+Required params: 
+ - transaction_id - batch ID
+
+Optional params: 
+  - page_size (A4, A5, A6, A7, A8)
+  - orientation (Portrait, Landscape)
 
 ```
 curl --header 'Content-type: application/json' -X POST 'http://example.com/pdf/batch/render' --data-binary '...'
