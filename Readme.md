@@ -54,6 +54,12 @@ Required params:
 Optional params: 
   - page_size (A4, A5, A6, A7, A8)
   - orientation (Portrait, Landscape)
+  - page_width (mm or px)
+  - page_height (mm or px)
+  - margin_left (mm or px)
+  - margin_right (mm or px)
+  - margin_top (mm or px)
+  - margin_bottom (mm or px)
 
 ```
 curl --header 'Content-type: application/json' -X POST 'http://example.com/pdf/render' --data-binary '...'
@@ -63,7 +69,8 @@ curl --header 'Content-type: application/json' -X POST 'http://example.com/pdf/r
 {
   "content": "<b>hello</b>",
   "page_size": "A4",
-  "orientation": "Portrait"
+  "orientation": "Portrait",
+  "margin_left": "20px"
 }
 ```
 
@@ -115,6 +122,12 @@ Required params:
 Optional params: 
   - page_size (A4, A5, A6, A7, A8)
   - orientation (Portrait, Landscape)
+  - page_width (mm or px)
+  - page_height (mm or px)
+  - margin_left (mm or px)
+  - margin_right (mm or px)
+  - margin_top (mm or px)
+  - margin_bottom (mm or px)
 
 ```
 curl --header 'Content-type: application/json' -X POST 'http://example.com/pdf/batch/render' --data-binary '...'

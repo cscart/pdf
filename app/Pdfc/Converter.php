@@ -21,7 +21,25 @@ class Converter
             'values' => array('Landscape', 'Portrait'),
             'param' => '--orientation',
             'default' => 'Portrait'
-        )
+        ),
+        'margin_left' => array(
+            'param' => '--margin-left'
+        ),
+        'margin_right' => array(
+            'param' => '--margin-right'
+        ),
+        'margin_top' => array(
+            'param' => '--margin-top'
+        ),
+        'margin_bottom' => array(
+            'param' => '--margin-bottom'
+        ),
+        'page_height' => array(
+            'param' => '--page-height'
+        ),
+        'page_width' => array(
+            'param' => '--page-width'
+        ),        
     );
 
     static public function convert($params)
@@ -54,10 +72,16 @@ class Converter
         $formed = array();
 
         foreach (self::$valid_params as $param => $data) {
-            if (!empty($params[$param]) && in_array($params[$param], $data['values'])) {
-                $formed[] = $data['param'] . ' ' . $params[$param];
-            } else {
-                $formed[] = $data['param'] . ' ' . $data['default'];
+            if (!empty($params[$param])) {
+                if (!empty($data['values'])) {
+                    if (in_array($params[$param], $data['values'])) {
+                        $formed[] = $data['param'] . ' ' . $params[$param];
+                    } else {
+                        $formed[] = $data['param'] . ' ' . $data['default'];
+                    }
+                } else {
+                    $formed[] = $data['param'] . ' ' . escapeshellarg($params[$param]);
+                }
             }
         }
 
