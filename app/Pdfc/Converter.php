@@ -13,7 +13,7 @@ class Converter
 
     static private $valid_params = array(
         'page_size' => array(
-            'values' => array('A4', 'A5', 'A6', 'A7', 'A8'),
+            'values' => array('A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10'),
             'param' => '--page-size',
             'default' => 'A4'
         ),
