@@ -4,13 +4,15 @@ namespace Pdfc;
 
 class Queue
 {
+    const TRANSACTION_TTL = 3600; // 1 hour
     static private $_instance = null;
 
     public function put($transaction_id, $data)
     {
         \dibi::query("INSERT INTO [queue]", array(
             'transaction_id' => $transaction_id,
-            'data' => $data
+            'data' => $data,
+            'ttl' => time() + self::TRANSACTION_TTL
         ));
     }
 
@@ -25,7 +27,7 @@ class Queue
                 $contents .= $d['data'];
             }
 
-            \dibi::query("DELETE FROM [queue] WHERE transaction_id = %s", $transaction_id);
+            \dibi::query("DELETE FROM [queue] WHERE transaction_id = %s OR ttl < %s", $transaction_id, time());
 
             return $contents;
         }
@@ -55,7 +57,8 @@ class Queue
         ));
 
         if (!empty($create)) {
-            \dibi::query("CREATE TABLE queue (id INTEGER PRIMARY KEY, transaction_id char(32), data text)");
+            \dibi::query("CREATE TABLE queue (id INTEGER PRIMARY KEY, transaction_id char(32), data text, ttl INTEGER)");
+            \dibi::query("CREATE INDEX ttl ON queue (ttl)");
         }
     }
 }
