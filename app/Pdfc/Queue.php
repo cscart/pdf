@@ -28,7 +28,7 @@ class Queue
             }
 
             \dibi::query("DELETE FROM [queue] WHERE transaction_id = %s OR ttl < %s", $transaction_id, time());
-
+            \dibi::query("VACUUM");
             return $contents;
         }
 
