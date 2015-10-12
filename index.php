@@ -6,11 +6,14 @@ use Pdfc\Response;
 use Pdfc\Status;
 use Respect\Rest\Router;
 
+define('ROOT_DIR', __DIR__);
+define('APP_DIR', ROOT_DIR . '/app');
 define('APP_WEB', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/'));
-define('APP_DIR', dirname(__FILE__) . '/app');
 
 $classLoader = require('app/vendor/autoload.php');
 $classLoader->add('Pdfc', APP_DIR);
+
+$config = include(ROOT_DIR . '/config.php');
 
 $r = new Router(APP_WEB);
 
@@ -20,7 +23,7 @@ $r->post('/pdf/render', function() {
 })->accept(Response::pdf());
 
 $r->post('/pdf/batch/render/*', function() {
-	$request = json_decode(file_get_contents('php://input'), true);
+    $request = json_decode(file_get_contents('php://input'), true);
     return Batch::render($request);
 })->accept(Response::pdf());
 

@@ -4,14 +4,7 @@ namespace Pdfc;
 
 class Converter
 {
-    static private $cmd = '/bin/wkhtmltopdf %s --encoding utf8 -q - -';
-    static private $dsc = array(
-        0 => array('pipe', 'r'), // stdin
-        1 => array('pipe', 'w'), // stdout
-        2 => array('pipe', 'w'), // stderr
-    );
-
-    static private $valid_params = array(
+    static protected $valid_params = array(
         'page_size' => array(
             'values' => array('A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10'),
             'param' => '--page-size',
@@ -49,27 +42,35 @@ class Converter
 
         if (!empty($params['content'])) {
 
-            $cmd = sprintf(self::$cmd, self::formParams($params));
+            $html_file = APP_DIR . '/files/' . $params['transaction_id'] . '.html';
+            $pdf_file = APP_DIR . '/files/' . $params['transaction_id'] . '.pdf';
+            @file_put_contents($html_file, $params['content']);
 
-            $process = proc_open(APP_DIR . $cmd, self::$dsc, $pipes);
+            $cmd = self::getBinPath() . ' ' . self::formParams($params) . ' ' . $html_file . ' ' . $pdf_file;
+            exec($cmd);
 
-            // Send the HTML on stdin
-            fwrite($pipes[0], $params['content']);
-            fclose($pipes[0]);
-
-            // Read the outputs
-            $contents = stream_get_contents($pipes[1]);
-            $errors = stream_get_contents($pipes[2]);
-            fclose($pipes[1]);
-            $return_value = proc_close($process);
+            $contents = @file_get_contents($pdf_file);
+            unlink($html_file);
+            unlink($pdf_file);
         }
 
         return $contents;
     }
 
-    static private function formParams($params)
+    protected static function getBinPath()
     {
-        $formed = array();
+        global $config;
+        
+        return strtr($config['wk_bin'], array(
+            '%APP_DIR%' => APP_DIR,
+        ));
+    }
+
+    protected static function formParams($params)
+    {
+        global $config;
+
+        $formed = $config['wk_params'];
 
         foreach (self::$valid_params as $param => $data) {
             if (!empty($params[$param])) {

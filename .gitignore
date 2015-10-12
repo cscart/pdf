@@ -3,6 +3,7 @@
 /app/vendor
 /app/files
 /app/composer.lock
+local_conf.php
 
 *.bak
 *.DS_Store*
