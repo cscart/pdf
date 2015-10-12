@@ -1,0 +1,11 @@
+/app/bin
+/app/db
+/app/vendor
+/app/files
+/app/composer.lock
+
+*.bak
+*.DS_Store*
+*.sublime*
+*.sw*
+*~
