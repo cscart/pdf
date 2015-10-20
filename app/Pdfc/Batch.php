@@ -10,7 +10,7 @@ class Batch
     static public function add($request)
     {
         if (empty($request['transaction_id'])) {
-            $t_id = md5(uniqid());
+            $t_id = md5(uniqid('', true));
         } else {
             $t_id = $request['transaction_id'];
         }
