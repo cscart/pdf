@@ -42,8 +42,15 @@ class Converter
 
         if (!empty($params['content'])) {
 
-            $html_file = APP_DIR . '/files/' . $params['transaction_id'] . '.html';
-            $pdf_file = APP_DIR . '/files/' . $params['transaction_id'] . '.pdf';
+            $transaction_id = '';
+            if (!empty($params['transaction_id'])) {
+                $transaction_id = $params['transaction_id'];
+            } else {
+                $transaction_id = md5(uniqid('', true));
+            }
+
+            $html_file = APP_DIR . '/files/' . $transaction_id . '.html';
+            $pdf_file = APP_DIR . '/files/' . $transaction_id . '.pdf';
             @file_put_contents($html_file, $params['content']);
 
             $cmd = self::getBinPath() . ' ' . self::formParams($params) . ' ' . $html_file . ' ' . $pdf_file;
