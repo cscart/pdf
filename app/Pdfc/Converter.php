@@ -32,7 +32,56 @@ class Converter
         ),
         'page_width' => array(
             'param' => '--page-width'
-        ),        
+        ),
+        'footer_center' => array(
+            'param' => '--footer-center'
+        ),
+        'footer_font_name' => array(
+            'param' => '--footer-font-name'
+        ),
+        'footer_font_size' => array(
+            'param' => '--footer-font-size'
+        ),
+        'footer_left' => array(
+            'param' => '--footer-left'
+        ),
+        'footer_line' => array(
+            'param' => '--footer-line'
+        ),
+        'footer_html' => array(
+            'param' => '--footer-html'
+        ),
+        'footer_right' => array(
+            'param' => '--footer-right'
+        ),
+        'footer_spacing' => array(
+            'param' => '--footer-spacing'
+        ),
+
+        'header_center' => array(
+            'param' => '--header-center'
+        ),
+        'header_font_name' => array(
+            'param' => '--header-font-name'
+        ),
+        'header_font_size' => array(
+            'param' => '--header-font-size'
+        ),
+        'header_left' => array(
+            'param' => '--header-left'
+        ),
+        'header_line' => array(
+            'param' => '--header-line'
+        ),
+        'header_html' => array(
+            'param' => '--header-html'
+        ),
+        'header_right' => array(
+            'param' => '--header-right'
+        ),
+        'header_spacing' => array(
+            'param' => '--header-spacing'
+        )
     );
 
     static public function convert($params)
