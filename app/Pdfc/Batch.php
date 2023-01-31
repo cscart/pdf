@@ -7,7 +7,7 @@ use Pdfc\Converter;
 
 class Batch
 {
-    static public function add($request)
+    public static function add($request)
     {
         if (empty($request['transaction_id'])) {
             $t_id = md5(uniqid('', true));
@@ -20,7 +20,7 @@ class Batch
         return $t_id;
     }
 
-    static public function render($params)    
+    public static function render($params)
     {
         $params['content'] = Queue::instance()->get($params['transaction_id']);
 

@@ -1,13 +1,8 @@
 <?php
 
-$config = array(
-    'wk_bin' => '%APP_DIR%/bin/wkhtmltopdf', // Local
-    'wk_params' => array(
-        '--encoding utf8',
-        '-q',
-    ),
-);
-
+$config = [
+    'node_bin' => '/usr/local/bin/node', // Local
+];
 
 if (file_exists(ROOT_DIR . '/local_conf.php')) {
     include ROOT_DIR . '/local_conf.php';

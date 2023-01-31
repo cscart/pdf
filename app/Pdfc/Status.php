@@ -9,10 +9,10 @@ class Status
     static private $_test = '<b>a</b>';
     static private $_search = '%PDF-';
 
-    static public function get()
+    public static function get()
     {
-        $response = Converter::convert(array('content' => self::$_test));
-        
+        $response = Converter::convert(['content' => self::$_test]);
+
         if (strpos($response, self::$_search) === 0) {
             $status = 'OK';
         } else {

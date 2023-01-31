@@ -11,11 +11,11 @@ class Queue
 
     public function put($transaction_id, $data)
     {
-        dibi::query("INSERT INTO [queue]", array(
+        dibi::query("INSERT INTO [queue]", [
             'transaction_id' => $transaction_id,
-            'data' => $data,
-            'ttl' => time() + self::TRANSACTION_TTL
-        ));
+            'data'           => $data,
+            'ttl'            => time() + self::TRANSACTION_TTL
+        ]);
     }
 
     public function get($transaction_id)    
@@ -37,7 +37,7 @@ class Queue
         return false;
     }
 
-    static public function instance()
+    public static function instance()
     {
         if (empty(self::$_instance)) {
             $class = '\\Pdfc\\Queue';

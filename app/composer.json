@@ -8,6 +8,7 @@
     ],
     "require": {
         "respect/rest": "*",
-        "dg/dibi": "*"
+        "dg/dibi": "*",
+        "ext-json": "*"
     }
 }

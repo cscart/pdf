@@ -3,8 +3,10 @@
 /app/vendor
 /app/files
 /app/composer.lock
+/app/node_modules
 local_conf.php
 
+.idea
 *.bak
 *.DS_Store*
 *.sublime*
