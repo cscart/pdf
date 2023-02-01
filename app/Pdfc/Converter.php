@@ -4,37 +4,6 @@ namespace Pdfc;
 
 class Converter
 {
-    static protected $valid_params = [
-        'page_size'     => [
-            'values'  => ['A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10'],
-            'param'   => '--page-size',
-            'default' => 'A4'
-        ],
-        'orientation'   => [
-            'values'  => ['Landscape', 'Portrait'],
-            'param'   => '--orientation',
-            'default' => 'Portrait'
-        ],
-        'margin_left'   => [
-            'param' => '--margin-left'
-        ],
-        'margin_right'  => [
-            'param' => '--margin-right'
-        ],
-        'margin_top'    => [
-            'param' => '--margin-top'
-        ],
-        'margin_bottom' => [
-            'param' => '--margin-bottom'
-        ],
-        'page_height'   => [
-            'param' => '--page-height'
-        ],
-        'page_width'    => [
-            'param' => '--page-width'
-        ]
-    ];
-
     public static function convert($params)
     {
         global $config;
@@ -43,53 +12,70 @@ class Converter
             return '';
         }
 
-        if (!empty($params['transaction_id'])) {
-            $transaction_id = $params['transaction_id'];
-        } else {
-            $transaction_id = md5(uniqid('', true));
-        }
+        $opts = [
+            'http' => [
+                'method' => "POST",
+                'header' => implode("\r\n", [
+                    "Cache-Control: no-cache",
+                    "Content-Type: application/json"
+                ]),
+                'content' => json_encode([
+                    'content' => $params['content'],
+                    'options' => self::resolveOptions($params),
+                ]),
+                'timeout' => 15
+            ]
+        ];
 
-        $html_file = APP_DIR . '/files/' . $transaction_id . '.html';
-        $pdf_file = APP_DIR . '/files/' . $transaction_id . '.pdf';
-        @file_put_contents($html_file, $params['content']);
+        $context = stream_context_create($opts);
 
-        $cmd = self::getBinPath()  . ' ' . APP_DIR . '/htmltopdf.js' . ' ' . $config['browser_ws_endpoint'] . ' ' . $html_file . ' ' . $pdf_file . ' ' . self::formParams($params);
-        exec($cmd);
-
-        $contents = @file_get_contents($pdf_file);
-        unlink($html_file);
-        unlink($pdf_file);
-
-        return $contents;
+        return file_get_contents($config['chrome_host'], false, $context);
     }
 
-    protected static function getBinPath()
+    protected static function resolveOptions(array $params)
     {
-        global $config;
+        $options = [
+            'landscape' => false,
+            'format' => 'A4',
+            'margin' => [
+                'bottom' => '10mm',
+                'left'   => '10mm',
+                'right'  => '10mm',
+                'top'    => '10mm',
+            ]
+        ];
 
-        return strtr($config['node_bin'], [
-            '%APP_DIR%' => APP_DIR,
-        ]);
-    }
-
-    protected static function formParams($params)
-    {
-        $formed = [];
-
-        foreach (self::$valid_params as $param => $data) {
-            if (!empty($params[$param])) {
-                if (!empty($data['values'])) {
-                    if (in_array($params[$param], $data['values'])) {
-                        $formed[] = $data['param'] . ' ' . $params[$param];
-                    } else {
-                        $formed[] = $data['param'] . ' ' . $data['default'];
+        foreach ($params as $key => $value) {
+            switch ($key) {
+                case 'page_size':
+                    if (in_array($value, ['A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6'], true)) {
+                        $options['format'] = $value;
                     }
-                } else {
-                    $formed[] = $data['param'] . ' ' . escapeshellarg($params[$param]);
-                }
+                    break;
+                case 'orientation':
+                    $options['landscape'] = strtolower($value) === 'landscape';
+                    break;
+                case 'margin_left':
+                    $options['margin']['left'] = $value;
+                    break;
+                case 'margin_right':
+                    $options['margin']['right'] = $value;
+                    break;
+                case 'margin_top':
+                    $options['margin']['top'] = $value;
+                    break;
+                case 'margin_bottom':
+                    $options['margin']['bottom'] = $value;
+                    break;
+                case 'page_height':
+                    $options['height'] = $value;
+                    break;
+                case 'page_width':
+                    $options['width'] = $value;
+                    break;
             }
         }
 
-        return implode(' ', $formed);
+        return $options;
     }
 }

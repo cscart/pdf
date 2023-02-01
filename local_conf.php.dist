@@ -1,4 +1,3 @@
 <?php
 
-$config['node_bin'] = '/usr/local/bin/node';
-$config['browser_ws_endpoint'] = 'ws://localhost:3000';
+$config['chrome_host'] = 'http://localhost:3000';
