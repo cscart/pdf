@@ -1,34 +1,30 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
-async function createBrowser() {
-    return puppeteer.launch({
-        ignoreHTTPSErrors: true,
-        headless: true,
-        args: ['--disable-gpu', '--no-sandbox', '--disable-setuid-sandbox']
+async function createBrowser(browserWSEndpoint) {
+    return await puppeteer.connect({
+        browserWSEndpoint: browserWSEndpoint
     });
 }
-async function render(inputPath, outputPath, opts = {}) {
-    const browser = await createBrowser();
-    const page = await browser.newPage();
-    page.setJavaScriptEnabled(false);
-
-    if (opts.viewport) {
-        await page.setViewport(opts.viewport);
-    }
-
-    if (opts.emulateScreenMedia) {
-        await page.emulateMedia('screen');
-    }
+async function render(browserWSEndpoint, inputPath, outputPath, opts = {}) {
+    let browser;
 
     try {
-        const pdfOpts = opts.pdf || {};
-        pdfOpts.path = outputPath;
+        browser = await createBrowser(browserWSEndpoint);
 
+        opts.pdf.path = outputPath;
+
+        const page = await browser.newPage();
+
+        await page.setJavaScriptEnabled(false);
         await page.setContent(fs.readFileSync(inputPath, 'utf8'));
-        await page.pdf(pdfOpts);
+        await page.pdf(opts.pdf);
+    } catch (e) {
+        console.error(e);
     } finally {
-        await browser.close();
+        if (browser) {
+            browser.disconnect();
+        }
     }
 }
 
@@ -81,4 +77,4 @@ function resolveOptions(arguments) {
 
 const argv = process.argv.slice(2);
 
-render(argv.at(0), argv.at(1), resolveOptions(argv));
+render(argv.at(0), argv.at(1), argv.at(2), resolveOptions(argv));

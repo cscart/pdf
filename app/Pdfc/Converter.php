@@ -37,6 +37,8 @@ class Converter
 
     public static function convert($params)
     {
+        global $config;
+
         if (empty($params['content'])) {
             return '';
         }
@@ -51,7 +53,7 @@ class Converter
         $pdf_file = APP_DIR . '/files/' . $transaction_id . '.pdf';
         @file_put_contents($html_file, $params['content']);
 
-        $cmd = self::getBinPath() . ' ' . APP_DIR . '/htmltopdf.js' . ' ' . $html_file . ' ' . $pdf_file . ' ' . self::formParams($params);
+        $cmd = self::getBinPath()  . ' ' . APP_DIR . '/htmltopdf.js' . ' ' . $config['browser_ws_endpoint'] . ' ' . $html_file . ' ' . $pdf_file . ' ' . self::formParams($params);
         exec($cmd);
 
         $contents = @file_get_contents($pdf_file);
