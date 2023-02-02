@@ -42,7 +42,8 @@ class Converter
                 'left'   => '10mm',
                 'right'  => '10mm',
                 'top'    => '10mm',
-            ]
+            ],
+            'printBackground' => true
         ];
 
         foreach ($params as $key => $value) {
