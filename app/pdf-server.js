@@ -4,7 +4,6 @@ const http = require("http");
 async function main (host, port) {
     const browser = await createBrowser();
     const server = http.createServer(async function (req, res) {
-        console.log('Request:' + req.url);
         const buffers = [];
 
         for await (const chunk of req) {
@@ -24,7 +23,7 @@ async function main (host, port) {
     });
 
     server.listen(port, host, () => {
-        console.log(`Server is running: http://{host}:{port}`);
+        console.log(`Server is running: http://${host}:${port}`);
     });
 }
 
@@ -32,24 +31,31 @@ async function createBrowser() {
     return puppeteer.launch({
         ignoreHTTPSErrors: true,
         headless: true,
+        userDataDir: '/tmp/user-data-dir',
         args: ['--disable-gpu', '--no-sandbox', '--disable-setuid-sandbox']
     });
 }
 async function render(browserWSEndpoint, content, opts = {}) {
-    let browser;
+    let browser, page;
     try {
         browser = await puppeteer.connect({browserWSEndpoint});
-        const page = await browser.newPage();
+
+        page = await browser.newPage();
         await page.setJavaScriptEnabled(false);
-        await page.setContent(content);
-        const result = await page.pdf(opts);
+        await page.setContent(content, {timeout: 5000}).catch((e) => {
+            if (!e instanceof puppeteer.TimeoutError) {
+                throw e;
+            }
+        });
 
-        await page.close();
-
-        return result;
+        return await page.pdf(opts);
     } catch (e) {
         console.error(e);
     } finally {
+        if (page) {
+            await page.close();
+        }
+
         if (browser) {
             browser.disconnect();
         }
