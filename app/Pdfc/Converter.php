@@ -36,7 +36,7 @@ class Converter
     {
         $options = [
             'landscape' => false,
-            'format' => 'A4',
+            'format' => !isset($params['page_width'], $params['page_height']) ? 'A4' : null,
             'margin' => [
                 'bottom' => '10mm',
                 'left'   => '10mm',

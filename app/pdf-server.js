@@ -32,7 +32,7 @@ async function createBrowser() {
         ignoreHTTPSErrors: true,
         headless: true,
         userDataDir: '/tmp/user-data-dir',
-        args: ['--disable-gpu', '--no-sandbox', '--disable-setuid-sandbox']
+        args: ['--disable-gpu', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
     });
 }
 async function render(browserWSEndpoint, content, opts = {}) {
