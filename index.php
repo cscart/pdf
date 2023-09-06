@@ -4,6 +4,7 @@ use Pdfc\Batch;
 use Pdfc\Converter;
 use Pdfc\Response;
 use Pdfc\Status;
+use Pdfc\Validator;
 use Respect\Rest\Router;
 
 define('ROOT_DIR', __DIR__);
@@ -19,6 +20,11 @@ $r = new Router(APP_WEB);
 
 $r->post('/pdf/render', function() {
     $request = json_decode(file_get_contents('php://input'), true);
+
+    if (!Validator::isValidRequest((array) $request, $_SERVER['REMOTE_ADDR'] ?? '')) {
+        return '';
+    }
+
     return Converter::convert($request);
 })->accept(Response::pdf());
 
@@ -29,6 +35,11 @@ $r->post('/pdf/batch/render/*', function() {
 
 $r->post('/pdf/batch/add', function() {
     $request = json_decode(file_get_contents('php://input'), true);
+
+    if (!Validator::isValidRequest((array) $request, $_SERVER['REMOTE_ADDR'] ?? '')) {
+        return '';
+    }
+
     return Batch::add($request);
 })->accept(Response::data());
 
