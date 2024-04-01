@@ -52,14 +52,14 @@ Required params:
   - content - HTML code
   
 Optional params: 
-  - page_size (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)
+  - page_size (A0, A1, A2, A3, A4, A5, A6)
   - orientation (Portrait, Landscape)
-  - page_width (mm or px)
-  - page_height (mm or px)
-  - margin_left (mm or px)
-  - margin_right (mm or px)
-  - margin_top (mm or px)
-  - margin_bottom (mm or px)
+  - page_width (mm)
+  - page_height (mm)
+  - margin_left (mm)
+  - margin_right (mm)
+  - margin_top (mm)
+  - margin_bottom (mm)
 
 ```
 curl --header 'Content-type: application/json' -X POST 'http://example.com/pdf/render' --data-binary '...'
@@ -70,7 +70,7 @@ curl --header 'Content-type: application/json' -X POST 'http://example.com/pdf/r
   "content": "<b>hello</b>",
   "page_size": "A4",
   "orientation": "Portrait",
-  "margin_left": "20px"
+  "margin_left": "20mm"
 }
 ```
 
@@ -99,7 +99,7 @@ curl --header 'Content-type: application/json' -X POST 'http://example.com/pdf/b
 
 ```json
 {
-  "content": "<b>hello</b>",
+  "content": "<b>hello</b>"
 }
 ```
 
@@ -120,14 +120,14 @@ Required params:
  - transaction_id - batch ID
 
 Optional params: 
-  - page_size (A4, A5, A6, A7, A8)
+  - page_size (A4, A5, A6)
   - orientation (Portrait, Landscape)
-  - page_width (mm or px)
-  - page_height (mm or px)
-  - margin_left (mm or px)
-  - margin_right (mm or px)
-  - margin_top (mm or px)
-  - margin_bottom (mm or px)
+  - page_width (mm)
+  - page_height (mm)
+  - margin_left (mm)
+  - margin_right (mm)
+  - margin_top (mm)
+  - margin_bottom (mm)
 
 ```
 curl --header 'Content-type: application/json' -X POST 'http://example.com/pdf/batch/render' --data-binary '...'

@@ -34,9 +34,10 @@ class Converter
 
     protected static function resolveOptions(array $params)
     {
+        $hasCustomPageSize = isset($params['page_width'], $params['page_height']);
         $options = [
             'landscape' => false,
-            'format' => !isset($params['page_width'], $params['page_height']) ? 'A4' : null,
+            'format' => !$hasCustomPageSize ? 'A4' : null,
             'margin' => [
                 'bottom' => '10mm',
                 'left'   => '10mm',
@@ -49,7 +50,7 @@ class Converter
         foreach ($params as $key => $value) {
             switch ($key) {
                 case 'page_size':
-                    if (!isset($params['page_width'], $params['page_height']) && in_array($value, ['A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6'], true)) {
+                    if (!$hasCustomPageSize && in_array($value, ['A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6'], true)) {
                         $options['format'] = $value;
                     }
                     break;
@@ -57,26 +58,35 @@ class Converter
                     $options['landscape'] = strtolower($value) === 'landscape';
                     break;
                 case 'margin_left':
-                    $options['margin']['left'] = $value;
+                    $options['margin']['left'] = self::transformSize($value);
                     break;
                 case 'margin_right':
-                    $options['margin']['right'] = $value;
+                    $options['margin']['right'] = self::transformSize($value);
                     break;
                 case 'margin_top':
-                    $options['margin']['top'] = $value;
+                    $options['margin']['top'] = self::transformSize($value);
                     break;
                 case 'margin_bottom':
-                    $options['margin']['bottom'] = $value;
+                    $options['margin']['bottom'] = self::transformSize($value);
                     break;
                 case 'page_height':
-                    $options['height'] = $value;
+                    $options['height'] = self::transformSize($value);
                     break;
                 case 'page_width':
-                    $options['width'] = $value;
+                    $options['width'] = self::transformSize($value);
                     break;
             }
         }
 
         return $options;
+    }
+
+    protected static function transformSize($value)
+    {
+        return preg_replace_callback('/([.\d]+)(.*)/', function (array $matches) {
+            $matches[2] = strtolower($matches[2]);
+
+            return $matches[1] . (in_array($matches[2], ['mm', 'cm'], true) ? $matches[2] : 'mm');
+        }, $value);
     }
 }
