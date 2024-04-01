@@ -49,7 +49,7 @@ class Converter
         foreach ($params as $key => $value) {
             switch ($key) {
                 case 'page_size':
-                    if (in_array($value, ['A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6'], true)) {
+                    if (!isset($params['page_width'], $params['page_height']) && in_array($value, ['A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6'], true)) {
                         $options['format'] = $value;
                     }
                     break;
